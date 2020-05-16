@@ -1,0 +1,486 @@
+# baseURI: http://steveray.com/alps2.shapes
+# imports: http://datashapes.org/dash
+
+@prefix alps: <http://steveray.com/alps#> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://steveray.com/alps>
+  owl:versionInfo "Created with TopBraid Composer" ;
+.
+alps:Await
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:subClassOf alps:EventDriven ;
+.
+alps:Decomposable
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:subClassOf alps:Task ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path alps:callsOutSubPlan ;
+      sh:maxCount 1 ;
+      sh:minCount 1 ;
+    ] ;
+.
+alps:Delay
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:subClassOf alps:Timed ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path alps:hasDuration ;
+      sh:datatype xsd:float ;
+      sh:maxCount 1 ;
+      sh:minCount 1 ;
+    ] ;
+.
+alps:EndPlan
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:label "name" ;
+  rdfs:subClassOf alps:SinglePredecessor ;
+  sh:not [
+      rdfs:label "Instance of name" ;
+      sh:class alps:NonBranching ;
+    ] ;
+  sh:not [
+      rdfs:label "Instance of name" ;
+      sh:class alps:NonBranching ;
+    ] ;
+  sh:not [
+      rdfs:label "Instance of name" ;
+      sh:class alps:ParameterizedSplit ;
+    ] ;
+  sh:not [
+      rdfs:label "Instance of name" ;
+      sh:class alps:ParameterizedSplit ;
+    ] ;
+  sh:not [
+      rdfs:label "Instance of name" ;
+      sh:class alps:Return ;
+    ] ;
+  sh:not [
+      rdfs:label "Instance of name" ;
+      sh:class alps:Return ;
+    ] ;
+.
+alps:EventDriven
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:subClassOf alps:Synchronization ;
+.
+alps:Information
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:subClassOf alps:NonBranching ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path alps:invokesCommand ;
+      sh:minCount 1 ;
+    ] ;
+.
+alps:Join
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:label "name" ;
+  rdfs:subClassOf alps:SingleSuccessor ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path alps:isPrecededBy ;
+      sh:class alps:SingleSuccessor ;
+      sh:minCount 2 ;
+    ] ;
+.
+alps:Lock
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:subClassOf alps:Timed ;
+.
+alps:Node
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:label "name" ;
+  rdfs:subClassOf owl:Thing ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path alps:hasCheckpoint ;
+      sh:datatype xsd:boolean ;
+      sh:maxCount 1 ;
+      sh:minCount 1 ;
+    ] ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path alps:hasNodeName ;
+      sh:datatype xsd:string ;
+      sh:maxCount 1 ;
+    ] ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path alps:hasNodeNumber ;
+      sh:datatype xsd:integer ;
+      sh:maxCount 1 ;
+      sh:minCount 1 ;
+    ] ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path alps:isPartOf ;
+    ] ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path alps:isPartOf ;
+      sh:class alps:Plan ;
+      sh:maxCount 1 ;
+      sh:minCount 1 ;
+    ] ;
+.
+alps:NonBranching
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:label "name" ;
+  rdfs:subClassOf alps:SinglePredecessor ;
+  rdfs:subClassOf alps:SingleSuccessor ;
+  sh:not [
+      rdfs:label "Instance of name" ;
+      sh:class alps:EndPlan ;
+    ] ;
+  sh:not [
+      rdfs:label "Instance of name" ;
+      sh:class alps:EndPlan ;
+    ] ;
+  sh:not [
+      rdfs:label "Instance of name" ;
+      sh:class alps:Join ;
+    ] ;
+  sh:not [
+      rdfs:label "Instance of name" ;
+      sh:class alps:Join ;
+    ] ;
+  sh:not [
+      rdfs:label "Instance of name" ;
+      sh:class alps:ParameterizedSplit ;
+    ] ;
+  sh:not [
+      rdfs:label "Instance of name" ;
+      sh:class alps:ParameterizedSplit ;
+    ] ;
+  sh:not [
+      rdfs:label "Instance of name" ;
+      sh:class alps:Return ;
+    ] ;
+  sh:not [
+      rdfs:label "Instance of name" ;
+      sh:class alps:Return ;
+    ] ;
+  sh:not [
+      rdfs:label "Instance of name" ;
+      sh:class alps:StartPlan ;
+    ] ;
+  sh:not [
+      rdfs:label "Instance of name" ;
+      sh:class alps:StartPlan ;
+    ] ;
+.
+alps:ParameterizedSplit
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:label "name" ;
+  rdfs:subClassOf alps:SinglePredecessor ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path alps:hasM-Number ;
+      sh:maxCount 1 ;
+      sh:minCount 1 ;
+    ] ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path alps:hasTiming ;
+      sh:maxCount 1 ;
+      sh:minCount 1 ;
+    ] ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path alps:isSucceededBy ;
+    ] ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path alps:isSucceededBy ;
+      sh:class alps:SinglePredecessor ;
+      sh:minCount 2 ;
+    ] ;
+.
+alps:Plan
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:label "name" ;
+  rdfs:subClassOf owl:Thing ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path alps:hasPlanComment ;
+      sh:maxCount 1 ;
+    ] ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path alps:hasPlanId ;
+      sh:datatype xsd:string ;
+      sh:maxCount 1 ;
+      sh:minCount 1 ;
+    ] ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path alps:hasPlanVersion ;
+      sh:datatype xsd:float ;
+      sh:maxCount 1 ;
+      sh:minCount 1 ;
+    ] ;
+.
+alps:PredicatedSplit
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:label "name" ;
+  rdfs:subClassOf alps:ParameterizedSplit ;
+.
+alps:Primitive
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:subClassOf alps:Task ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path alps:isDefinedBy ;
+      sh:datatype xsd:string ;
+      sh:maxCount 1 ;
+      sh:minCount 1 ;
+    ] ;
+.
+alps:Rendezvous
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:subClassOf alps:EventDriven ;
+.
+alps:Resource
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:subClassOf alps:NonBranching ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path alps:hasAllocationRole ;
+      sh:datatype xsd:string ;
+      sh:maxCount 1 ;
+      sh:minCount 1 ;
+    ] ;
+.
+alps:ResourceBinding
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:subClassOf alps:NonBranching ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path alps:bindsVariable ;
+      sh:maxCount 1 ;
+      sh:minCount 1 ;
+    ] ;
+.
+alps:Return
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:label "name" ;
+  rdfs:subClassOf alps:SinglePredecessor ;
+  sh:not [
+      rdfs:label "Instance of name" ;
+      sh:class alps:EndPlan ;
+    ] ;
+  sh:not [
+      rdfs:label "Instance of name" ;
+      sh:class alps:EndPlan ;
+    ] ;
+  sh:not [
+      rdfs:label "Instance of name" ;
+      sh:class alps:NonBranching ;
+    ] ;
+  sh:not [
+      rdfs:label "Instance of name" ;
+      sh:class alps:NonBranching ;
+    ] ;
+  sh:not [
+      rdfs:label "Instance of name" ;
+      sh:class alps:ParameterizedSplit ;
+    ] ;
+  sh:not [
+      rdfs:label "Instance of name" ;
+      sh:class alps:ParameterizedSplit ;
+    ] ;
+.
+alps:Signal
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:subClassOf alps:EventDriven ;
+.
+alps:SinglePredecessor
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:label "name" ;
+  rdfs:subClassOf alps:Node ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path alps:isPrecededBy ;
+    ] ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path alps:isPrecededBy ;
+      sh:class alps:Node ;
+      sh:maxCount 1 ;
+      sh:minCount 1 ;
+    ] ;
+.
+alps:SingleSuccessor
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:label "name" ;
+  rdfs:subClassOf alps:Node ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path alps:isSucceededBy ;
+    ] ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path alps:isSucceededBy ;
+      sh:class alps:Node ;
+      sh:maxCount 1 ;
+      sh:minCount 1 ;
+    ] ;
+.
+alps:StartPlan
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:label "name" ;
+  rdfs:subClassOf alps:SingleSuccessor ;
+  sh:not [
+      rdfs:label "Instance of name" ;
+      sh:class alps:Join ;
+    ] ;
+  sh:not [
+      rdfs:label "Instance of name" ;
+      sh:class alps:Join ;
+    ] ;
+  sh:not [
+      rdfs:label "Instance of name" ;
+      sh:class alps:NonBranching ;
+    ] ;
+  sh:not [
+      rdfs:label "Instance of name" ;
+      sh:class alps:NonBranching ;
+    ] ;
+.
+alps:StartPlan_1
+  a alps:StartPlan ;
+  rdfs:label "name" ;
+.
+alps:Synchronization
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:subClassOf alps:NonBranching ;
+.
+alps:Task
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:subClassOf alps:NonBranching ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path alps:hasDuration ;
+      sh:datatype xsd:float ;
+      sh:maxCount 1 ;
+      sh:minCount 1 ;
+    ] ;
+.
+alps:Timed
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:subClassOf alps:Synchronization ;
+.
+alps:TimedWait
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:subClassOf alps:Timed ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path alps:atTime ;
+      sh:datatype xsd:dateTime ;
+      sh:maxCount 1 ;
+      sh:minCount 1 ;
+    ] ;
+.
+alps:Unlock
+  a owl:Class ;
+  a sh:NodeShape ;
+  rdfs:subClassOf alps:Timed ;
+.
+alps:atTime
+  a owl:DatatypeProperty ;
+.
+alps:bindsVariable
+  a owl:DatatypeProperty ;
+.
+alps:callsOutSubPlan
+  a owl:DatatypeProperty ;
+.
+alps:hasAllocationRole
+  a owl:DatatypeProperty ;
+.
+alps:hasCheckpoint
+  a owl:DatatypeProperty ;
+  rdfs:label "name" ;
+.
+alps:hasDuration
+  a owl:DatatypeProperty ;
+.
+alps:hasM-Number
+  a rdf:Property ;
+.
+alps:hasNodeName
+  a owl:DatatypeProperty ;
+  rdfs:label "name" ;
+.
+alps:hasNodeNumber
+  a owl:DatatypeProperty ;
+  rdfs:label "name" ;
+.
+alps:hasPlanComment
+  a owl:ObjectProperty ;
+  rdfs:label "name" ;
+.
+alps:hasPlanId
+  a owl:ObjectProperty ;
+  rdfs:label "name" ;
+.
+alps:hasPlanVersion
+  a rdf:Property ;
+  rdfs:label "name" ;
+.
+alps:hasTiming
+  a rdf:Property ;
+.
+alps:invokesCommand
+  a owl:DatatypeProperty ;
+.
+alps:isDefinedBy
+  a owl:DatatypeProperty ;
+.
+alps:isPartOf
+  a owl:FunctionalProperty ;
+  rdfs:label "name" ;
+.
+alps:isPrecededBy
+  a rdf:Property ;
+.
+alps:isSucceededBy
+  a rdf:Property ;
+.
+<http://steveray.com/alps2.shapes>
+  a owl:Ontology ;
+  owl:imports <http://datashapes.org/dash> ;
+.
