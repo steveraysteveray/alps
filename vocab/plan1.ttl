@@ -1,0 +1,19 @@
+# baseURI: http://steveray.com/alps/vocab/plan1
+# imports: http://steveray.com/alps
+# prefix: plan1
+
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix plan1: <http://steveray.com/alps/vocab/plan1#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://steveray.com/alps/vocab/plan1>
+  a owl:Ontology ;
+  owl:imports <http://steveray.com/alps> ;
+  owl:versionInfo "Created with TopBraid Composer" ;
+.
+plan1:StartPlan_1
+  a alps:StartPlan ;
+  rdfs:label "name" ;
+.

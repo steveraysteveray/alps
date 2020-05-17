@@ -259,6 +259,7 @@ WHERE {
 FILTER (?other != ?this) .
 }""" ;
     ] ;
+  sh:targetClass alps:Plan ;
 .
 alps:PredicatedSplit
   a owl:Class ;
@@ -371,10 +372,6 @@ alps:SingleSuccessor
   sh:property [
       a sh:PropertyShape ;
       sh:path alps:isSucceededBy ;
-    ] ;
-  sh:property [
-      a sh:PropertyShape ;
-      sh:path alps:isSucceededBy ;
       sh:class alps:Node ;
       sh:maxCount 1 ;
       sh:minCount 1 ;
@@ -401,10 +398,6 @@ alps:StartPlan
       rdfs:label "Instance of name" ;
       sh:class alps:NonBranching ;
     ] ;
-.
-alps:StartPlan_1
-  a alps:StartPlan ;
-  rdfs:label "name" ;
 .
 alps:Synchronization
   a owl:Class ;
