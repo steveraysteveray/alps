@@ -1,5 +1,6 @@
-# baseURI: http://steveray.com/alps2.shapes
+# baseURI: http://steveray.com/alps
 # imports: http://datashapes.org/dash
+# prefix: alps
 
 @prefix alps: <http://steveray.com/alps#> .
 @prefix dash: <http://datashapes.org/dash#> .
@@ -10,7 +11,10 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <http://steveray.com/alps>
+  a owl:Ontology ;
+  owl:imports <http://datashapes.org/dash> ;
   owl:versionInfo "Created with TopBraid Composer" ;
+  sh:declare alps:PrefixDeclaration ;
 .
 alps:Await
   a owl:Class ;
@@ -239,11 +243,33 @@ alps:Plan
       sh:minCount 1 ;
     ] ;
 .
+alps:PlanUniqueIdentifierConstraint
+  a sh:NodeShape ;
+  rdfs:label "Joint uniqueness constraint for PlanId and PlanVersion" ;
+  sh:sparql [
+      rdfs:comment "Enforces the joint uniqueness of planId and planVersion for a plan instance." ;
+      sh:message "Plan  '{?other}'  already has a planId of  '{?planId}'  and planVersion of  '{?planVersion}' . The combination must be unique." ;
+      sh:prefixes <http://steveray.com/alps> ;
+      sh:select """SELECT $other ?planId ?planVersion
+WHERE {
+    ?this alps:hasPlanId ?planId .
+?this alps:hasPlanVersion ?planVersion .
+?other alps:hasPlanId ?planId .
+?other alps:hasPlanVersion ?planVersion .
+FILTER (?other != ?this) .
+}""" ;
+    ] ;
+.
 alps:PredicatedSplit
   a owl:Class ;
   a sh:NodeShape ;
   rdfs:label "name" ;
   rdfs:subClassOf alps:ParameterizedSplit ;
+.
+alps:PrefixDeclaration
+  a sh:PrefixDeclaration ;
+  sh:namespace "http://steveray.com/alps#"^^xsd:anyURI ;
+  sh:prefix "alps" ;
 .
 alps:Primitive
   a owl:Class ;
@@ -479,8 +505,4 @@ alps:isPrecededBy
 .
 alps:isSucceededBy
   a rdf:Property ;
-.
-<http://steveray.com/alps2.shapes>
-  a owl:Ontology ;
-  owl:imports <http://datashapes.org/dash> ;
 .
