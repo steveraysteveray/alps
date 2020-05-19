@@ -1,0 +1,64 @@
+# baseURI: null
+
+@prefix composite: <http://www.topbraid.org/2007/05/composite.owl#> .
+@prefix forms: <http://www.topbraid.org/2007/01/forms.owl#> .
+@prefix inference: <http://www.topbraid.org/2007/06/inference.owl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix visual: <http://topbraid.org/visual#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+[
+  a visual:Graph ;
+  visual:child [
+      a visual:Box ;
+      visual:depicts <http://steveray.com/alps#EndPlan> ;
+      visual:height "18"^^xsd:int ;
+      visual:width "131"^^xsd:int ;
+      visual:x "833"^^xsd:int ;
+      visual:y "275"^^xsd:int ;
+    ] ;
+  visual:child [
+      a visual:Box ;
+      visual:depicts <http://steveray.com/alps#Plan> ;
+      visual:height "18"^^xsd:int ;
+      visual:width "111"^^xsd:int ;
+      visual:x "146"^^xsd:int ;
+      visual:y "196"^^xsd:int ;
+    ] ;
+  visual:child [
+      a visual:Box ;
+      visual:depicts <http://steveray.com/alps#StartPlan> ;
+      visual:height "18"^^xsd:int ;
+      visual:width "137"^^xsd:int ;
+      visual:x "814"^^xsd:int ;
+      visual:y "122"^^xsd:int ;
+    ] ;
+  visual:child [
+      a visual:Box ;
+      visual:depicts <http://steveray.com/alps/vocab/alpsplan1#EndPlan_1> ;
+      visual:height "18"^^xsd:int ;
+      visual:width "151"^^xsd:int ;
+      visual:x "612"^^xsd:int ;
+      visual:y "275"^^xsd:int ;
+    ] ;
+  visual:child [
+      a visual:Box ;
+      visual:depicts <http://steveray.com/alps/vocab/alpsplan1#Plan_1> ;
+      visual:height "18"^^xsd:int ;
+      visual:width "131"^^xsd:int ;
+      visual:x "396"^^xsd:int ;
+      visual:y "199"^^xsd:int ;
+    ] ;
+  visual:child [
+      a visual:Box ;
+      visual:depicts <http://steveray.com/alps/vocab/alpsplan1#StartPlan_1> ;
+      visual:height "18"^^xsd:int ;
+      visual:width "157"^^xsd:int ;
+      visual:x "608"^^xsd:int ;
+      visual:y "120"^^xsd:int ;
+    ] ;
+  visual:depicts <http://steveray.com/alps/vocab/alpsplan1#StartPlan_1> ;
+  rdfs:label "Trivial Plan" ;
+].

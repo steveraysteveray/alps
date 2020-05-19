@@ -16,7 +16,11 @@
 .
 plan1:EndPlan_1
   a alps:EndPlan ;
-  rdfs:label "Test Property" ;
+  alps:hasCheckpoint true ;
+  alps:hasNodeNumber 2 ;
+  alps:isPartOf plan1:Plan_1 ;
+  alps:isPrecededBy plan1:StartPlan_1 ;
+  rdfs:label "End plan" ;
 .
 plan1:Plan_1
   a alps:Plan ;
@@ -30,5 +34,6 @@ plan1:StartPlan_1
   alps:hasCheckpoint true ;
   alps:hasNodeNumber 1 ;
   alps:isPartOf plan1:Plan_1 ;
+  alps:isSucceededBy plan1:EndPlan_1 ;
   rdfs:label "StartPlan_1" ;
 .
