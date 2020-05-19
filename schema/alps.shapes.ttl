@@ -4,6 +4,7 @@
 
 @prefix alps: <http://steveray.com/alps#> .
 @prefix dash: <http://datashapes.org/dash#> .
+@prefix graphql: <http://datashapes.org/graphql#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -15,6 +16,19 @@
   owl:imports <http://datashapes.org/dash> ;
   owl:versionInfo "Created with TopBraid Composer" ;
   sh:declare alps:PrefixDeclaration ;
+.
+alps:AddCheckpoint
+  a dash:SPARQLUpdateSuggestionGenerator ;
+  rdfs:label "Suggest adding a checkpoint" ;
+  sh:update """DELETE {
+    
+}
+INSERT {
+    ?this <http://steveray.com/alps#alps:hasCheckpoint> TRUE .
+}
+WHERE {
+    
+}""" ;
 .
 alps:Await
   a owl:Class ;
@@ -39,7 +53,6 @@ alps:Delay
   sh:property [
       a sh:PropertyShape ;
       sh:path alps:hasDuration ;
-      sh:datatype xsd:float ;
       sh:maxCount 1 ;
       sh:minCount 1 ;
     ] ;
@@ -47,7 +60,7 @@ alps:Delay
 alps:EndPlan
   a owl:Class ;
   a sh:NodeShape ;
-  rdfs:label "name" ;
+  rdfs:label "EndPlan" ;
   rdfs:subClassOf alps:SinglePredecessor ;
   sh:not [
       rdfs:label "Instance of name" ;
@@ -92,7 +105,7 @@ alps:Information
 alps:Join
   a owl:Class ;
   a sh:NodeShape ;
-  rdfs:label "name" ;
+  rdfs:label "Join" ;
   rdfs:subClassOf alps:SingleSuccessor ;
   sh:property [
       a sh:PropertyShape ;
@@ -109,11 +122,12 @@ alps:Lock
 alps:Node
   a owl:Class ;
   a sh:NodeShape ;
-  rdfs:label "name" ;
+  rdfs:label "Node" ;
   rdfs:subClassOf owl:Thing ;
   sh:property [
       a sh:PropertyShape ;
       sh:path alps:hasCheckpoint ;
+      dash:suggestionGenerator alps:AddCheckpoint ;
       sh:datatype xsd:boolean ;
       sh:maxCount 1 ;
       sh:minCount 1 ;
@@ -121,19 +135,13 @@ alps:Node
   sh:property [
       a sh:PropertyShape ;
       sh:path alps:hasNodeName ;
-      sh:datatype xsd:string ;
       sh:maxCount 1 ;
     ] ;
   sh:property [
       a sh:PropertyShape ;
       sh:path alps:hasNodeNumber ;
-      sh:datatype xsd:integer ;
       sh:maxCount 1 ;
       sh:minCount 1 ;
-    ] ;
-  sh:property [
-      a sh:PropertyShape ;
-      sh:path alps:isPartOf ;
     ] ;
   sh:property [
       a sh:PropertyShape ;
@@ -146,7 +154,7 @@ alps:Node
 alps:NonBranching
   a owl:Class ;
   a sh:NodeShape ;
-  rdfs:label "name" ;
+  rdfs:label "NonBranching" ;
   rdfs:subClassOf alps:SinglePredecessor ;
   rdfs:subClassOf alps:SingleSuccessor ;
   sh:not [
@@ -193,7 +201,7 @@ alps:NonBranching
 alps:ParameterizedSplit
   a owl:Class ;
   a sh:NodeShape ;
-  rdfs:label "name" ;
+  rdfs:label "ParameterizedSplit" ;
   rdfs:subClassOf alps:SinglePredecessor ;
   sh:property [
       a sh:PropertyShape ;
@@ -210,10 +218,6 @@ alps:ParameterizedSplit
   sh:property [
       a sh:PropertyShape ;
       sh:path alps:isSucceededBy ;
-    ] ;
-  sh:property [
-      a sh:PropertyShape ;
-      sh:path alps:isSucceededBy ;
       sh:class alps:SinglePredecessor ;
       sh:minCount 2 ;
     ] ;
@@ -221,8 +225,15 @@ alps:ParameterizedSplit
 alps:Plan
   a owl:Class ;
   a sh:NodeShape ;
-  rdfs:label "name" ;
+  rdfs:label "Plan" ;
   rdfs:subClassOf owl:Thing ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path alps:contains ;
+      sh:class alps:Node ;
+      sh:minCount 1 ;
+      sh:name "contains" ;
+    ] ;
   sh:property [
       a sh:PropertyShape ;
       sh:path alps:hasPlanComment ;
@@ -231,14 +242,12 @@ alps:Plan
   sh:property [
       a sh:PropertyShape ;
       sh:path alps:hasPlanId ;
-      sh:datatype xsd:string ;
       sh:maxCount 1 ;
       sh:minCount 1 ;
     ] ;
   sh:property [
       a sh:PropertyShape ;
       sh:path alps:hasPlanVersion ;
-      sh:datatype xsd:float ;
       sh:maxCount 1 ;
       sh:minCount 1 ;
     ] ;
@@ -250,7 +259,7 @@ alps:PlanUniqueIdentifierConstraint
       rdfs:comment "Enforces the joint uniqueness of planId and planVersion for a plan instance." ;
       sh:message "Plan  '{?other}'  already has a planId of  '{?planId}'  and planVersion of  '{?planVersion}' . The combination must be unique." ;
       sh:prefixes <http://steveray.com/alps> ;
-      sh:select """SELECT $other ?planId ?planVersion
+      sh:select """SELECT ?this ?other ?planId ?planVersion
 WHERE {
     ?this alps:hasPlanId ?planId .
 ?this alps:hasPlanVersion ?planVersion .
@@ -264,7 +273,7 @@ FILTER (?other != ?this) .
 alps:PredicatedSplit
   a owl:Class ;
   a sh:NodeShape ;
-  rdfs:label "name" ;
+  rdfs:label "PredicatedSplit" ;
   rdfs:subClassOf alps:ParameterizedSplit ;
 .
 alps:PrefixDeclaration
@@ -279,7 +288,6 @@ alps:Primitive
   sh:property [
       a sh:PropertyShape ;
       sh:path alps:isDefinedBy ;
-      sh:datatype xsd:string ;
       sh:maxCount 1 ;
       sh:minCount 1 ;
     ] ;
@@ -296,7 +304,6 @@ alps:Resource
   sh:property [
       a sh:PropertyShape ;
       sh:path alps:hasAllocationRole ;
-      sh:datatype xsd:string ;
       sh:maxCount 1 ;
       sh:minCount 1 ;
     ] ;
@@ -315,7 +322,7 @@ alps:ResourceBinding
 alps:Return
   a owl:Class ;
   a sh:NodeShape ;
-  rdfs:label "name" ;
+  rdfs:label "Return" ;
   rdfs:subClassOf alps:SinglePredecessor ;
   sh:not [
       rdfs:label "Instance of name" ;
@@ -350,12 +357,8 @@ alps:Signal
 alps:SinglePredecessor
   a owl:Class ;
   a sh:NodeShape ;
-  rdfs:label "name" ;
+  rdfs:label "SinglePredecessor" ;
   rdfs:subClassOf alps:Node ;
-  sh:property [
-      a sh:PropertyShape ;
-      sh:path alps:isPrecededBy ;
-    ] ;
   sh:property [
       a sh:PropertyShape ;
       sh:path alps:isPrecededBy ;
@@ -367,7 +370,7 @@ alps:SinglePredecessor
 alps:SingleSuccessor
   a owl:Class ;
   a sh:NodeShape ;
-  rdfs:label "name" ;
+  rdfs:label "SingleSuccessor" ;
   rdfs:subClassOf alps:Node ;
   sh:property [
       a sh:PropertyShape ;
@@ -380,7 +383,7 @@ alps:SingleSuccessor
 alps:StartPlan
   a owl:Class ;
   a sh:NodeShape ;
-  rdfs:label "name" ;
+  rdfs:label "StartPlan" ;
   rdfs:subClassOf alps:SingleSuccessor ;
   sh:not [
       rdfs:label "Instance of name" ;
@@ -411,7 +414,6 @@ alps:Task
   sh:property [
       a sh:PropertyShape ;
       sh:path alps:hasDuration ;
-      sh:datatype xsd:float ;
       sh:maxCount 1 ;
       sh:minCount 1 ;
     ] ;
@@ -428,7 +430,6 @@ alps:TimedWait
   sh:property [
       a sh:PropertyShape ;
       sh:path alps:atTime ;
-      sh:datatype xsd:dateTime ;
       sh:maxCount 1 ;
       sh:minCount 1 ;
     ] ;
@@ -440,58 +441,70 @@ alps:Unlock
 .
 alps:atTime
   a owl:DatatypeProperty ;
+  rdfs:range xsd:dateTime ;
 .
 alps:bindsVariable
   a owl:DatatypeProperty ;
 .
 alps:callsOutSubPlan
-  a owl:DatatypeProperty ;
+  a owl:ObjectProperty ;
+.
+alps:contains
+  a owl:ObjectProperty ;
+  rdfs:label "Test Property" ;
 .
 alps:hasAllocationRole
   a owl:DatatypeProperty ;
 .
 alps:hasCheckpoint
   a owl:DatatypeProperty ;
-  rdfs:label "name" ;
+  rdfs:label "hasCheckpoint" ;
 .
 alps:hasDuration
   a owl:DatatypeProperty ;
+  rdfs:range xsd:time ;
 .
 alps:hasM-Number
-  a rdf:Property ;
+  a owl:DatatypeProperty ;
+  rdfs:range xsd:integer ;
 .
 alps:hasNodeName
   a owl:DatatypeProperty ;
-  rdfs:label "name" ;
+  rdfs:label "hasNodeName" ;
+  rdfs:range xsd:string ;
 .
 alps:hasNodeNumber
   a owl:DatatypeProperty ;
-  rdfs:label "name" ;
+  rdfs:label "hasNodeNumber" ;
+  rdfs:range xsd:integer ;
 .
 alps:hasPlanComment
-  a owl:ObjectProperty ;
-  rdfs:label "name" ;
+  a owl:DatatypeProperty ;
+  rdfs:label "hasPlanComment" ;
+  rdfs:range xsd:string ;
 .
 alps:hasPlanId
-  a owl:ObjectProperty ;
-  rdfs:label "name" ;
+  a owl:DatatypeProperty ;
+  rdfs:label "hasPlanId" ;
+  rdfs:range xsd:string ;
 .
 alps:hasPlanVersion
-  a rdf:Property ;
-  rdfs:label "name" ;
+  a owl:DatatypeProperty ;
+  rdfs:label "hasPlanVersion" ;
+  rdfs:range xsd:float ;
 .
 alps:hasTiming
   a rdf:Property ;
 .
 alps:invokesCommand
-  a owl:DatatypeProperty ;
+  a rdf:Property ;
 .
 alps:isDefinedBy
   a owl:DatatypeProperty ;
 .
 alps:isPartOf
   a owl:FunctionalProperty ;
-  rdfs:label "name" ;
+  rdfs:label "isPartOf" ;
 .
 alps:isPrecededBy
   a rdf:Property ;
